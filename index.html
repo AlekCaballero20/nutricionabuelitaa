@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NutriAbuelita | Seguimiento semanal</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="hero">
+    <div class="hero__content">
+      <p class="eyebrow">Plan familiar de alimentación</p>
+      <h1>NutriAbuelita</h1>
+      <p class="hero__text">Una app sencilla para recordar el menú, registrar cómo va comiendo y elegir almuerzos sin caer en el festival nacional del cubito de caldo.</p>
+      <div class="hero__actions">
+        <a href="#hoy" class="btn btn--primary">Ver comida de hoy</a>
+        <button class="btn btn--ghost" id="printBtn">Imprimir plan</button>
+      </div>
+    </div>
+    <div class="hero__card" aria-label="Reglas principales">
+      <span class="hero__icon">🥘</span>
+      <strong>Regla base</strong>
+      <p>Proteína magra + 1 carbohidrato + verduras + agua/aromática + fruta o postrecito suave.</p>
+    </div>
+  </header>
+
+  <nav class="tabs" aria-label="Navegación principal">
+    <a href="#hoy">Hoy</a>
+    <a href="#seguimiento">Seguimiento</a>
+    <a href="#menu">Menú semanal</a>
+    <a href="#armador">Armar plato</a>
+    <a href="#postres">Postrecitos</a>
+    <a href="#mercado">Mercado</a>
+  </nav>
+
+  <main>
+    <section class="section grid-2" id="hoy">
+      <article class="panel today-panel">
+        <div class="section-title-row">
+          <div>
+            <p class="eyebrow">Hoy</p>
+            <h2 id="todayTitle">Plan del día</h2>
+          </div>
+          <select id="daySelector" class="select" aria-label="Elegir día de la semana"></select>
+        </div>
+        <div id="todayMeals" class="meal-list"></div>
+        <div class="tip-box">
+          <strong>Recordatorio clave:</strong>
+          <span>No mezclar arroz + papa + yuca + plátano en el mismo almuerzo. Un solo carbohidrato, porque el cuerpo no necesita una asamblea de almidones.</span>
+        </div>
+      </article>
+
+      <aside class="panel score-panel">
+        <p class="eyebrow">Resumen del día</p>
+        <h2>Semáforo nutricional</h2>
+        <div class="score-circle" id="scoreCircle">0%</div>
+        <p id="scoreText" class="muted">Marca el seguimiento para ver el avance.</p>
+        <div class="mini-stats">
+          <div><strong id="statMeals">0/6</strong><span>Comidas</span></div>
+          <div><strong id="statWater">0</strong><span>Vasos agua</span></div>
+          <div><strong id="statAlerts">0</strong><span>Alertas</span></div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="section" id="seguimiento">
+      <div class="section-title-row">
+        <div>
+          <p class="eyebrow">Registro diario</p>
+          <h2>Seguimiento de alimentación</h2>
+        </div>
+        <input type="date" id="trackDate" class="select" />
+      </div>
+
+      <div class="tracker-grid" id="trackerGrid"></div>
+
+      <div class="panel form-panel">
+        <h3>Notas del día</h3>
+        <div class="form-grid">
+          <label>
+            Apetito
+            <select id="appetite" class="select">
+              <option value="">Sin registrar</option>
+              <option>Bueno</option>
+              <option>Regular</option>
+              <option>Bajito</option>
+              <option>Muy poco</option>
+            </select>
+          </label>
+          <label>
+            Energía
+            <select id="energy" class="select">
+              <option value="">Sin registrar</option>
+              <option>Bien</option>
+              <option>Normal</option>
+              <option>Cansada</option>
+              <option>Muy cansada</option>
+            </select>
+          </label>
+          <label>
+            Vasos de agua/aromática
+            <input type="number" id="water" min="0" max="12" class="input" />
+          </label>
+        </div>
+        <label class="full-label">
+          Observaciones
+          <textarea id="notes" rows="4" placeholder="Ej: comió bien el almuerzo, no quiso postre, le gustó más el pescado con limón..." class="textarea"></textarea>
+        </label>
+        <div class="danger-checks">
+          <label><input type="checkbox" data-alert="sal" /> Se usó sal/cubito</label>
+          <label><input type="checkbox" data-alert="jugo" /> Tomó jugo</label>
+          <label><input type="checkbox" data-alert="frito" /> Hubo frito/paquete</label>
+          <label><input type="checkbox" data-alert="salsa" /> Salsa comercial</label>
+        </div>
+        <div class="form-actions">
+          <button class="btn btn--primary" id="saveTrack">Guardar seguimiento</button>
+          <button class="btn btn--ghost" id="clearDay">Limpiar día</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="menu">
+      <div class="section-title-row">
+        <div>
+          <p class="eyebrow">Rotación</p>
+          <h2>Menú semanal sugerido</h2>
+        </div>
+        <button class="btn btn--ghost" id="copyMenuBtn">Copiar menú</button>
+      </div>
+      <div class="menu-grid" id="weeklyMenu"></div>
+    </section>
+
+    <section class="section grid-2" id="armador">
+      <article class="panel">
+        <p class="eyebrow">Decidir rápido</p>
+        <h2>Armador de almuerzo</h2>
+        <p class="muted">Elige una opción por grupo. La app te avisa si el plato se mantiene dentro de la idea del plan.</p>
+        <div class="builder-grid">
+          <label>Proteína
+            <select id="proteinSelect" class="select"></select>
+          </label>
+          <label>Carbohidrato
+            <select id="carbSelect" class="select"></select>
+          </label>
+          <label>Verdura principal
+            <select id="vegSelect" class="select"></select>
+          </label>
+          <label>Postrecito
+            <select id="dessertSelect" class="select"></select>
+          </label>
+        </div>
+        <div class="plate-result" id="plateResult"></div>
+        <div class="form-actions">
+          <button class="btn btn--primary" id="randomPlateBtn">Sorpréndanme, humanos</button>
+          <button class="btn btn--ghost" id="copyPlateBtn">Copiar plato</button>
+        </div>
+      </article>
+
+      <aside class="panel rules-panel">
+        <p class="eyebrow">Reglas de oro</p>
+        <h2>Lo que no se negocia</h2>
+        <ul class="check-list">
+          <li>Sin cubitos, caldos concentrados ni condimento completo.</li>
+          <li>Sin jugos, mejor fruta entera.</li>
+          <li>Sin fritos, paquetes, embutidos ni salsas comerciales.</li>
+          <li>Una sola harina/carbohidrato por comida principal.</li>
+          <li>Proteína magra en porción tipo palma de la mano.</li>
+          <li>Verduras generosas, cocidas o crudas según tolerancia.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <section class="section" id="postres">
+      <p class="eyebrow">Dulcecito sensato</p>
+      <h2>Postrecitos para rotar</h2>
+      <div class="cards-grid" id="dessertCards"></div>
+    </section>
+
+    <section class="section" id="mercado">
+      <div class="section-title-row">
+        <div>
+          <p class="eyebrow">Lista práctica</p>
+          <h2>Mercado semanal</h2>
+        </div>
+        <button class="btn btn--ghost" id="copyMarketBtn">Copiar mercado</button>
+      </div>
+      <div class="market-grid" id="marketGrid"></div>
+    </section>
+
+    <section class="section grid-2" id="backup">
+      <article class="panel">
+        <p class="eyebrow">Backup</p>
+        <h2>Exportar seguimiento</h2>
+        <p class="muted">Guarda una copia del seguimiento en JSON por si cambian de celular o navegador. Porque perder datos por accidente es una tradición digital lamentable.</p>
+        <button class="btn btn--primary" id="exportBtn">Descargar backup</button>
+      </article>
+      <article class="panel">
+        <p class="eyebrow">Restaurar</p>
+        <h2>Importar backup</h2>
+        <input type="file" id="importFile" accept="application/json" class="input" />
+      </article>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <footer class="footer">
+    <p>Hecho para seguimiento familiar. No reemplaza indicaciones médicas específicas, pero sí ayuda a que no se nos olvide el plan entre el arroz, la papa y el drama cotidiano. 💜</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
